@@ -1,7 +1,13 @@
 import pandas as pd
 import numpy as np
 
+import re
+
 from colorama import Fore
+
+
+
+
 
 # EmergenciasModel
 class EmergenciasModel:
@@ -98,42 +104,20 @@ class EmergenciasModel:
         # Calculamos el tiempo transcurrido entre la inervencion y la solicitud
         self.data['Tiempo transcurrido'] = self.data['Hora Intervención'] - self.data['Hora Solicitud']
         # volver a convertir a formato de tiempo
-        self.data['Tiempo transcurrido'] = pd.to_timedelta(self.data['Tiempo transcurrido'], unit='s')
+        #self.data['Tiempo transcurrido'] = pd.to_timedelta(self.data['Tiempo transcurrido'], unit='s')
 
     def preprocesamiento(self):
         self.datatime()
         self.valores_faltantes()
         self.tiempo_transcurrido()
-        self.datos_categoricos()  
+        # self.datos_categoricos()  
+
+    def show(self):
+        # DATASET
+        self.data.head()
+        self.clean_data()
+        #self.exploracion_datos()
+        self.preprocesamiento()
 
 
-
-
-# Ejemplo de uso:
-csv_url = "https://datos.madrid.es/egobfiles/MANUAL/300178/activaciones_samur_2023.csv"
-
-data_cleaned = EmergenciasModel(csv_url)
-
-
-# Realizar la limpieza
-data_cleaned.clean_data()
-
-# Imprimir nombres de las columnas después de la limpieza
-print(Fore.GREEN+"\nDATASET:"+Fore.WHITE)
-print(data_cleaned.data.head())
-
-# E X P L O R A C I O N    D E    L O S    D A T O S  ####
-data_cleaned.exploracion_datos()
-
-# P R E P R O C E S A M I E N T O    D E    L O S    D A T O S  ####
-data_cleaned.preprocesamiento()
-
-# quiero ver la columna de tiempo transcurrido
-
-print(data_cleaned.data["Hora Solicitud"].head())
-print(data_cleaned.data["Hora Intervención"].head())
-print(data_cleaned.data['Tiempo transcurrido'].head())
-
-# ver columnas
-print(data_cleaned.data.columns)
 
