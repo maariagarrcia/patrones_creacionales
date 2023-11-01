@@ -3,6 +3,6 @@
 -------------
  EJERCICIO 1
 --------------
-![Uploading EjercicioAbstract.jpg…]()
+UML/EjercicioAbstract.jpg
 
 
