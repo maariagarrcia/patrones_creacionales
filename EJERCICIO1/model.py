@@ -7,8 +7,6 @@ from colorama import Fore
 
 
 
-
-
 # EmergenciasModel
 class EmergenciasModel:
     def __init__(self, csv_url: str):
@@ -113,11 +111,7 @@ class EmergenciasModel:
         # self.datos_categoricos()  
 
     def show(self):
-        # DATASET
-        self.data.head()
         self.clean_data()
-        #self.exploracion_datos()
+        self.exploracion_datos()
         self.preprocesamiento()
-
-
 

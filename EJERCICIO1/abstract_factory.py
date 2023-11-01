@@ -1,17 +1,17 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
+
 import plotext as plt
 import matplotlib.pyplot as mathplot
-import pandas as pd
 
 import pandas as pd
+import numpy as np
+
 import termcharts 
 from rich import print
 from rich.layout import Layout
 from rich.panel import Panel
 
-import matplotlib.pyplot as mathplot
-import numpy as np
 
 
 # Definición de las clases abstractas
