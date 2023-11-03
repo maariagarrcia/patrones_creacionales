@@ -37,34 +37,35 @@ class EmergenciasModel:
     
     def exploracion_datos(self):
         print()
-        print(Fore.GREEN+"E X P L O R A C I O N    D E    L O S    D A T O S:"+Fore.WHITE)
-        print(Fore.YELLOW+"1.  ver las primeras filas"+Fore.WHITE,self.data.head())
+        print(Fore.CYAN+"E X P L O R A C I O N    D E    L O S    D A T O S:"+Fore.WHITE)
         print()
-        print(Fore.YELLOW+"2.  ver las COLUMNAS"+Fore.WHITE,self.data.columns)
+        print(Fore.BLUE+"1.  Ver las primeras FILAS:" "\n"+Fore.WHITE,self.data.head())
         print()
-        print(Fore.YELLOW+"3.  ver los TIPOS DE DATOS"+Fore.WHITE,self.data.dtypes)
+        print(Fore.BLUE+"2.  Ver las COLUMNAS: ""\n"+Fore.WHITE,self.data.columns)
         print()
-        print(Fore.YELLOW+"4.  ver los VALORES UNICOS"+Fore.WHITE,self.data.nunique())
+        print(Fore.BLUE+"3.  Ver los TIPOS DE DATOS: ""\n"+Fore.WHITE,self.data.dtypes)
         print()
-        print(Fore.YELLOW+"5.  ver el SIZE"+Fore.WHITE,self.data.size)
+        print(Fore.BLUE+"4.  Ver los VALORES UNICOS:""\n"+Fore.WHITE,self.data.nunique())
         print()
-        print(Fore.YELLOW+"6.  ver el SHAPE"+Fore.WHITE,self.data.shape)
+        print(Fore.BLUE+"5.  Ver el SIZE:""\n"+Fore.WHITE,self.data.size)
         print()
-        print(Fore.YELLOW+"7.  ver los VALORES FALTANTES"+Fore.WHITE,self.data.isnull().sum().sum()/self.data.size*100,"%")
+        print(Fore.BLUE+"6.  Ver el SHAPE:""\n"+Fore.WHITE,self.data.shape)
         print()
-        print(Fore.YELLOW+"8.  ver los VALORES FALTANTES"+Fore.WHITE,self.data.isnull().sum()/len(self.data)*100)
+        print(Fore.BLUE+"7.  Ver los VALORES FALTANTES:""\n"+Fore.WHITE,self.data.isnull().sum().sum()/self.data.size*100,"%")
         print()
-        print(Fore.YELLOW+"9.  ver los VALORES 0"+Fore.WHITE,self.data[self.data==0].count()/len(self.data)*100)
+        print(Fore.BLUE+"8.  Ver los VALORES FALTANTES:""\n"+Fore.WHITE,self.data.isnull().sum()/len(self.data)*100)
         print()
-        print(Fore.YELLOW+"10.  ver los VALORES DUPLICADOS"+Fore.WHITE,self.data.duplicated().sum()/len(self.data)*100,"%")
+        print(Fore.BLUE+"9.  Ver los VALORES NULOS:""\n"+Fore.WHITE,self.data[self.data==0].count()/len(self.data)*100)
         print()
-        print(Fore.YELLOW+"11.  ver los VALORES CATEGORICOS"+Fore.WHITE,self.data.select_dtypes(include=['object']).columns)
+        print(Fore.BLUE+"10.  Ver los VALORES DUPLICADOS:""\n"+Fore.WHITE,self.data.duplicated().sum()/len(self.data)*100,"%")
         print()
-        print(Fore.YELLOW+"12.  ver los VALORES NUMERICOS"+Fore.WHITE,self.data.select_dtypes(include=['int64','float64']).columns)
+        print(Fore.BLUE+"11.  Ver los VALORES CATEGORICOS:""\n"+Fore.WHITE,self.data.select_dtypes(include=['object']).columns)
         print()
-        print(Fore.YELLOW+"13.  ver la CARDINALIDAD DE LAS VARIABLES CATEGORICAS"+Fore.WHITE,self.data.select_dtypes(include=['object']).nunique())
+        print(Fore.BLUE+"12.  Ver los VALORES NUMERICOS:""\n"+Fore.WHITE,self.data.select_dtypes(include=['int64','float64']).columns)
         print()
-        print(Fore.YELLOW +"14. ver resumen estadistico de vbles numericas "+Fore.WHITE,self.data.describe())
+        print(Fore.BLUE+"13.  Ver la CARDINALIDAD DE LAS VARIABLES CATEGORICAS:""\n"+Fore.WHITE,self.data.select_dtypes(include=['object']).nunique())
+        print()
+        print(Fore.BLUE +"14. Ver resumen estadistico de VARIABLES NUMÉRICAS:""\n"+Fore.WHITE,self.data.describe())
         print()
 
     def datos_categoricos(self):
@@ -96,22 +97,50 @@ class EmergenciasModel:
         
     def valores_faltantes(self):
         # todos loos huecos que esten vacio lso rellebamos por 0
-        self.data = self.data.fillna(0) 
-
+        #self.data = self.data.fillna(0) 
+        self.data = self.data.replace(np.nan, 0)
+        pass
     def tiempo_transcurrido(self):
         # Calculamos el tiempo transcurrido entre la inervencion y la solicitud
         self.data['Tiempo transcurrido'] = self.data['Hora Intervención'] - self.data['Hora Solicitud']
-        # volver a convertir a formato de tiempo
+        # volVer a conVertir a formato de tiempo
         #self.data['Tiempo transcurrido'] = pd.to_timedelta(self.data['Tiempo transcurrido'], unit='s')
+    
+    def hora_intervencion_distrito(self):
+        # Crear una columna nueva con la de hora de intervencion media por distrito que se llame "Hora Intervención Media"
+        self.data['Hora Intervención Media'] = self.data.groupby('Distrito')['Hora Intervención'].transform('mean')
+
+        # oordenar por hora de intervencion media
+        self.data = self.data.sort_values('Hora Intervención Media')
+
+    def incidentes_hospital(self):
+        # Count incidents per hospital and pivot the data
+        hospital_counts = self.data.groupby('Hospital').size().reset_index(name='Incidentes por Hospital')
+        #hospital_counts = hospital_counts.sort_values('Incidentes por Hospital', ascending=False)
+        self.data["Incidentes por Hospital"] = hospital_counts["Incidentes por Hospital"]
+        print(self.data["Incidentes por Hospital"])
 
     def preprocesamiento(self):
         self.datatime()
         self.valores_faltantes()
         self.tiempo_transcurrido()
-        # self.datos_categoricos()  
+        self.hora_intervencion_distrito()
+
+    def controller(self):
+        self.clean_data()
+        self.preprocesamiento()
 
     def show(self):
         self.clean_data()
         self.exploracion_datos()
         self.preprocesamiento()
 
+def main():
+    csv_url = "https://datos.madrid.es/egobfiles/MANUAL/300178/activaciones_samur_2023.csv"
+    model = EmergenciasModel(csv_url)
+    model.show()
+
+if __name__ == "__main__":
+    main()
+
+  

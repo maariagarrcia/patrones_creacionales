@@ -16,8 +16,8 @@ class Pizza:
         self.sauce = None
         self.ingredients = []
         self.techniques = []
-        self.presentation = None  
-        self.pairing = None    # maridaje
+        self.presentation = None
+        self.pairing = None  # maridaje
         self.extras = []
 
 class PizzaBuilder:
@@ -44,7 +44,7 @@ class PizzaBuilder:
         self.pizza.presentation = presentation
         return self
 
-    def set_pairing(self, pairing): # maridaje
+    def set_pairing(self, pairing):  # maridaje
         self.pizza.pairing = pairing
         return self
 
@@ -54,23 +54,9 @@ class PizzaBuilder:
 
     def get_result(self):
         return self.pizza
-    
+
+
 class Director:
     def __init__(self, builder):
         self.builder = builder
 
-    def build_margarita(self):
-        return self.builder.set_masa_type('masa delgada').set_sauce('salsa de tomate').add_ingredient('mozzarella').add_ingredient('albahaca').set_technique('horno').set_presentation('redonda').set_pairing('cerveza').add_extra('aceitunas').get_result()
-           
-
-
-pizza_builder = PizzaBuilder()
-director = Director(pizza_builder)
-director.build_margarita()
-
-
-pizza = pizza_builder.get_result()
-print(pizza.__dict__)
-
-    
-        
