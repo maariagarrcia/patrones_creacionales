@@ -100,6 +100,7 @@ class EmergenciasModel:
         #self.data = self.data.fillna(0) 
         self.data = self.data.replace(np.nan, 0)
         pass
+   
     def tiempo_transcurrido(self):
         # Calculamos el tiempo transcurrido entre la inervencion y la solicitud
         self.data['Tiempo transcurrido'] = self.data['Hora Intervención'] - self.data['Hora Solicitud']
