@@ -54,7 +54,7 @@ class EmergenciasVista:
 
 
     def exploracion_datos(self):
-        messagebox.showinfo("Exploración de Datos", self.model.exploracion_datos())
+        messagebox.showinfo("EN EL TERMINAL", self.model.exploracion_datos())
         self.model.show()
 
     def texto(self):

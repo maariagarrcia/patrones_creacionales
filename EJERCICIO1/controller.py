@@ -14,7 +14,7 @@ class EmergenciasController:
         self.view = EmergenciasVista(tk.Tk(),self.model)
 
     def run(self):
-        self.model.controller()
+        #self.model.controller()
         self.view.actualizar(self.model)
 
   
